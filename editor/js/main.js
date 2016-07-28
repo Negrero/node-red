@@ -41,10 +41,12 @@ var RED = (function() {
                 }
                 if (nsCount === 0) {
                     loadNodes();
+
                 }
             }
         });
     }
+
 
     function loadNodes() {
         $.ajax({
@@ -61,18 +63,37 @@ var RED = (function() {
                 $(".palette-spinner").hide();
                 $(".palette-scroll").show();
                 $("#palette-search").show();
-                loadFlows();
+                loadProjects();
+
             }
         });
     }
 
-    function loadFlows() {
+    function loadProjects() {
+        $.ajax({
+            headers: {
+                "Accept":"application/json"
+            },
+            cache: false,
+            url: 'projects',
+            success: function(data) {
+                console.log(data)
+                RED.projects.init(data)
+                loadFlows(data[Object.keys(data)[0]]._id);
+            }
+
+        });
+    }
+
+    function loadFlows(id) {
         $.ajax({
             headers: {
                 "Accept":"application/json"
             },
             cache: false,
             url: 'flows',
+            data:{id:id},
+            dataType: 'json',
             success: function(nodes) {
                 RED.nodes.import(nodes);
                 RED.nodes.dirty(false);

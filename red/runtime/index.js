@@ -139,6 +139,7 @@ function start() {
                     log.info(log._("runtime.paths.settings",{path:settings.settingsFile}));
                 }
                 redNodes.loadFlows().then(redNodes.startFlows);
+                redNodes.loadProjects();
                 started = true;
             }).otherwise(function(err) {
                 console.log(err);

@@ -20,6 +20,7 @@ var fs = require("fs");
 
 var registry = require("./registry");
 var credentials = require("./credentials");
+var projects = require("./projects");
 var flows = require("./flows");
 var context = require("./context");
 var Node = require("./Node");
@@ -81,6 +82,7 @@ function init(runtime) {
     flows.init(runtime.settings,runtime.storage);
     registry.init(runtime);
     context.init(runtime.settings);
+    projects.init(runtime);
 }
 
 function disableNode(id) {
@@ -150,5 +152,12 @@ module.exports = {
     addCredentials: credentials.add,
     getCredentials: credentials.get,
     deleteCredentials: credentials.delete,
-    getCredentialDefinition: credentials.getDefinition
+    getCredentialDefinition: credentials.getDefinition,
+
+    // Projects
+    addProjects: projects.add,
+    getProjects: projects.get,
+    deleteProjects: projects.delete,
+    loadProjects:projects.load
+    //getCredentialDefinition: credentials.getDefinition
 };

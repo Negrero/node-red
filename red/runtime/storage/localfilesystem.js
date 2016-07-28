@@ -28,6 +28,7 @@ var promiseDir = nodeFn.lift(mkdirp);
 var initialFlowLoadComplete = false;
 var settings;
 var flowsFile;
+var projectFile;
 var flowsFullPath;
 var flowsFileBackup;
 var credentialsFile;
@@ -177,6 +178,7 @@ var localfilesystem = {
         flowsFileBackup = fspath.join(ffDir,"."+ffName+".backup");
 
         sessionsFile = fspath.join(settings.userDir,".sessions.json");
+        projectFile = fspath.join(settings.userDir,"projects.json");
 
         libDir = fspath.join(settings.userDir,"lib");
         libFlowsDir = fspath.join(libDir,"flows");
@@ -259,6 +261,28 @@ var localfilesystem = {
         return writeFile(flowsFullPath, flowData);
     },
 
+    getProjects: function() {
+        return when.promise(function(resolve,reject) {
+            fs.readFile(projectFile,'utf8',function(err,data){
+                if (!err) {
+                    try {
+                        return resolve(JSON.parse(data));
+                    } catch(err2) {
+                        log.trace("Corrupted sessions file - resetting");
+                    }
+                }
+                resolve({});
+            })
+        });
+    },
+    saveProjects: function(projects) {
+        if (settings.readOnly) {
+            return when.resolve();
+        }
+        return writeFile(sessionsFile,JSON.stringify(projects));
+    },
+
+
     getCredentials: function() {
         return when.promise(function(resolve) {
             fs.readFile(credentialsFile,'utf8',function(err,data) {
@@ -315,6 +339,7 @@ var localfilesystem = {
         }
         return writeFile(globalSettingsFile,JSON.stringify(settings,null,1));
     },
+
     getSessions: function() {
         return when.promise(function(resolve,reject) {
             fs.readFile(sessionsFile,'utf8',function(err,data){

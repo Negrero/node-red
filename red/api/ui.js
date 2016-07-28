@@ -34,8 +34,14 @@ function nodeIconDir(dir) {
 
 module.exports = {
     init: function(runtime) {
-        editorTemplate = fs.readFileSync(path.join(templateDir,"index.mst"),"utf8");
-        Mustache.parse(editorTemplate);
+        if(runtime.settings.multiProyect){
+            editorTemplate = fs.readFileSync(path.join(templateDir,"multiproyect.html"),"utf8");
+            Mustache.parse(editorTemplate);
+        }else{
+            editorTemplate = fs.readFileSync(path.join(templateDir,"index.mst"),"utf8");
+            Mustache.parse(editorTemplate);
+        }
+
         // TODO: this allows init to be called multiple times without
         //       registering multiple instances of the listener.
         //       It isn't.... ideal.

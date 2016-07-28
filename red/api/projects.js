@@ -20,33 +20,17 @@ var settings;
 
 module.exports = {
     init: function(runtime) {
-        settings = runtime.settings;
+        //settings = runtime.settings;
         redNodes = runtime.nodes;
         log = runtime.log;
     },
     get: function(req,res) {
-        var id=req.query.id
-        if(settings.multiProyect){
-            var projects=redNodes.getProjects();
-            var nodes=redNodes.getFlows();
-            var nodesprojects=[]
-                projects[id].flows.forEach(function(el,ix,ar){
-                    var tab=redNodes.getFlow(el)
-                    tab.type="tab"
-                    nodesprojects.push(tab)
-                    nodesprojects=nodesprojects.concat(tab.nodes)
-
-                    /*
-                    nodes.forEach(function(ele,ixd,arr){
-                        if(tab.id==ele.z)
-                            nodesprojects.push(ele)
-                    })
-                    */
-                })
-            res.json(nodesprojects)
+        log.audit({event: "projects.get"},req);
+        var projectsid=req.params.id
+        if(projectsid){
+            res.json(redNodes.getProjects(projectsid));
         }else{
-            log.audit({event: "flows.get"},req);
-            res.json(redNodes.getFlows());
+            res.json(redNodes.getProjects());
         }
     },
     post: function(req,res) {

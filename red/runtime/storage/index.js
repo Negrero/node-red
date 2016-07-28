@@ -58,6 +58,12 @@ var storageModuleInterface = {
         saveFlows: function(flows) {
             return storageModule.saveFlows(flows);
         },
+        getProjects: function() {
+            return storageModule.getProjects();
+        },
+        saveProjects: function(flows) {
+            return storageModule.saveProjets(flows);
+        },
         getCredentials: function() {
             return storageModule.getCredentials();
         },
